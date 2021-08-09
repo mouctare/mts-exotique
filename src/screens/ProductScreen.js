@@ -46,7 +46,7 @@ const ProductScreen = (props) => {
                     {product.countInStock > 0 ? (
                       <span className="success">En stock</span>
                     ) : (
-                      <span className="error">Indisponible</span>
+                      <span className="danger">Indisponible</span>
                     )}
                   </div>
                 </div>
