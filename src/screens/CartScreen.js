@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { addToCart } from '../actions/cartActions';
+import { addToCart, removeFromCart } from '../actions/cartActions';
 import MessageBox from '../components/MessageBox';
 
 const CartScreen = (props) => {
@@ -21,8 +21,14 @@ const CartScreen = (props) => {
       dispatch(addToCart(productId, qty));
     }
   }, [dispatch, productId, qty]);
+
   const removeFromCartHandler = (id) =>{
     // delete action
+    dispatch(removeFromCart(id));
+  }
+  
+  const checkoutHandler = () =>{
+    props.history.push('/signin?redirect=shipping');
   }
 
     return (
@@ -46,7 +52,10 @@ const CartScreen = (props) => {
                           <Link to={`/product/${item.product}`}>{item.name}</Link>
                           </div>
                           <div>
-                            <select value={item.qty} onChange={e => dispatch(addToCart(item.product), Number(e.target.value))}
+                            <select value={item.qty} onChange={e => dispatch(addToCart(item.product , Number(e.target.value))
+                            
+                            )
+                          }
                             >
                              {/*  Ici, on met le nombre de produit disponible */}
                               {[...Array(item.countInStock).keys()].map(
@@ -77,15 +86,17 @@ const CartScreen = (props) => {
                <ul>
                <li>
                  <h2>
-                 Sous-total ({cartItems.reduce((a, c) => a + c.qty, 0)} produits) : {cartItems.reduce((a, c) => a + c.price * c.qty, 0)}
-                 </h2>
+                Sout-total ({cartItems.reduce((a, c) => a + c.qty, 0)} produit) : 
+                {cartItems.reduce((a, c) => a + c.price * c.qty, 0)} €
+              </h2>
                  
                </li>
                <li>
               <button
                 type="button"
-                /* onClick={checkoutHandler} */
+                onClick={checkoutHandler} 
                 className="primary block"
+               /*  On block le passage en caisse si le produit n'est pas dans le panier */
                 disabled={cartItems.length === 0}
               >
                Passer à la caisse
